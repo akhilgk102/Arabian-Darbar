@@ -7,6 +7,30 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+
+ /* Footer logo */
+.footer-logo img{
+  height:60px;
+  width:auto;
+  display:block;
+  margin-bottom: 10px;
+}
+
+/* Mobile footer logo */
+@media (max-width:768px){
+
+  .footer-logo{
+    display:flex;
+    justify-content:left;
+    align-items:center;
+    margin-bottom: 10px;
+  }
+
+  .footer-logo img{
+    height:40px;
+  }
+
+}
 :root {
   --gold: #C89B3C;
   --gold-light: #e0b84e;
@@ -1055,7 +1079,7 @@ footer{background:var(--charcoal);border-top:1px solid rgba(200,155,60,.1);paddi
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <a href="#" class="nav-logo">Arabian Darbar<span>Restaurant · Haripad</span></a>
+      <a href="#" class="footer-logo"><img src="./index_files/logo.png" alt=""></a>
       <p>Bringing the rich, authentic flavours of Arabian cuisine to the heart of Haripad.</p>
       <div class="footer-social">
         <a class="social-btn" href="#" title="Facebook">
