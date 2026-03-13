@@ -234,51 +234,350 @@
             background: var(--cream);
             transition: .3s
         }
-
+ /* ═══════════════════════════════════════
+           REDESIGNED MOBILE MENU
+        ═══════════════════════════════════════ */
         .mobile-menu {
             position: fixed;
             top: 0;
-            right: -100%;
-            width: 75%;
+            right: 0;
+            width: 100%;
             height: 100%;
-            background: var(--charcoal);
             z-index: 999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding-left: 40px;
-            gap: 2rem;
-            transition: right .4s ease
+            pointer-events: none;
+            overflow: hidden;
         }
 
         .mobile-menu.open {
-            right: 0
+            pointer-events: all;
         }
 
-        .mobile-menu a {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--cream);
-            text-decoration: none;
-            opacity: .85
-        }
-
-        .mobile-menu a:hover {
-            opacity: 1;
-            color: var(--gold)
-        }
-
-        .mobile-close {
+        /* Backdrop */
+        .mobile-menu-backdrop {
             position: absolute;
-            top: 28px;
-            right: 5%;
-            font-size: 2rem;
-            color: var(--cream);
-            cursor: pointer;
-            background: none;
-            border: none
+            inset: 0;
+            background: rgba(8, 5, 2, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            transition: background 0.55s ease, backdrop-filter 0.55s ease;
         }
+
+        .mobile-menu.open .mobile-menu-backdrop {
+            background: rgba(8, 5, 2, 0.78);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Slide-in panel */
+        .mobile-menu-panel {
+            position: absolute;
+            top: 80px;
+            right: 0;
+            width: min(86vw, 380px);
+            height: 100%;
+            background: #191919;
+            transform: translateX(108%);
+            transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Left gold edge accent */
+        .mobile-menu-panel::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(200, 155, 60, 0.6) 20%,
+                rgba(200, 155, 60, 0.6) 80%,
+                transparent 100%
+            );
+            z-index: 2;
+        }
+
+        /* Top-right decorative corner */
+        .mobile-menu-panel::after {
+            content: '';
+            position: absolute;
+            top: 4.5rem;
+            left: 1.8rem;
+            width: 44px;
+            height: 44px;
+            border-top: 1px solid rgba(200, 155, 60, 0.22);
+            border-left: 1px solid rgba(200, 155, 60, 0.22);
+            pointer-events: none;
+        }
+
+        .mobile-menu.open .mobile-menu-panel {
+            transform: translateX(0);
+        }
+
+        /* ── Header ── */
+        .mobile-menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.3rem 1.4rem 1.3rem 2.2rem;
+            border-bottom: 1px solid rgba(200, 155, 60, 0.1);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mobile-menu-brand {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.4s ease 0.32s, transform 0.4s ease 0.32s;
+        }
+
+        .mobile-menu.open .mobile-menu-brand {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu-brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.4px;
+            line-height: 1;
+        }
+
+        .mobile-menu-brand-sub {
+            font-family: 'Jost', sans-serif;
+            font-size: 0.5rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: rgba(247, 244, 237, 0.28);
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        /* Close button */
+        .mobile-close {
+            position: relative;
+            width: 38px;
+            height: 38px;
+            background: rgba(200, 155, 60, 0.07);
+            border: 1px solid rgba(200, 155, 60, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s, transform 0.4s, border-color 0.3s;
+            flex-shrink: 0;
+        }
+
+        .mobile-close::before,
+        .mobile-close::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 1.5px;
+            background: var(--gold);
+            transition: transform 0.3s;
+        }
+
+        .mobile-close::before { transform: rotate(45deg); }
+        .mobile-close::after { transform: rotate(-45deg); }
+
+        .mobile-close:hover {
+            background: rgba(200, 155, 60, 0.15);
+            border-color: rgba(200, 155, 60, 0.4);
+            transform: rotate(90deg);
+        }
+
+        /* ── Nav items ── */
+        .mobile-menu-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0.5rem 0 0.5rem 2.2rem;
+            overflow-y: auto;
+        }
+
+        .mobile-menu-nav a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 1.4rem 0.85rem 0;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(200, 155, 60, 0.06);
+            opacity: 0;
+            transform: translateX(30px);
+            transition:
+                opacity 0.45s ease,
+                transform 0.45s ease,
+                border-color 0.3s;
+            position: relative;
+            group: true;
+        }
+
+        /* Left accent line on hover */
+        .mobile-menu-nav a::before {
+            content: '';
+            position: absolute;
+            left: -2.2rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gold);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.open .mobile-menu-nav a { opacity: 1; transform: translateX(0); }
+        .mobile-menu.open .mobile-menu-nav a:nth-child(1) { transition-delay: 0.14s; }
+        .mobile-menu.open .mobile-menu-nav a:nth-child(2) { transition-delay: 0.20s; }
+        .mobile-menu.open .mobile-menu-nav a:nth-child(3) { transition-delay: 0.26s; }
+        .mobile-menu.open .mobile-menu-nav a:nth-child(4) { transition-delay: 0.32s; }
+        .mobile-menu.open .mobile-menu-nav a:nth-child(5) { transition-delay: 0.38s; }
+        .mobile-menu.open .mobile-menu-nav a:nth-child(6) { transition-delay: 0.44s; }
+        .mobile-menu.open .mobile-menu-nav a:nth-child(7) { transition-delay: 0.50s; }
+
+        .mobile-menu-nav a:hover {
+            border-bottom-color: rgba(200, 155, 60, 0.18);
+        }
+
+        .mobile-menu-nav a:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Item inner layout */
+        .mnav-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .mnav-num {
+            font-family: 'Jost', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2.5px;
+            color: var(--gold);
+            opacity: 0.45;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .mnav-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--cream);
+            line-height: 1.1;
+            transition: color 0.3s;
+        }
+
+        .mobile-menu-nav a:hover .mnav-text {
+            color: var(--gold);
+        }
+
+        /* Arrow icon */
+        .mnav-arrow {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(200, 155, 60, 0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: rgba(200, 155, 60, 0.35);
+            transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
+        }
+
+        .mobile-menu-nav a:hover .mnav-arrow {
+            background: var(--gold);
+            color: var(--charcoal);
+            border-color: var(--gold);
+            transform: translateX(2px);
+        }
+
+        /* ── Footer strip ── */
+        .mobile-menu-footer {
+            padding: 1.2rem 1.4rem 1.4rem 2.2rem;
+            border-top: 1px solid rgba(200, 155, 60, 0.1);
+            flex-shrink: 0;
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.4s ease 0.52s, transform 0.4s ease 0.52s;
+        }
+
+        .mobile-menu.open .mobile-menu-footer {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-book-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            background: var(--gold);
+            color: var(--charcoal);
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            padding: 0.85rem 1rem;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .mobile-book-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.8rem;
+        }
+
+        .mobile-menu-hours {
+            font-size: 0.58rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(247, 244, 237, 0.2);
+            font-family: 'Jost', sans-serif;
+        }
+
+        .mobile-menu-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.58rem;
+            letter-spacing: 1px;
+            color: rgba(200, 155, 60, 0.45);
+            font-family: 'Jost', sans-serif;
+        }
+
+        /* Bottom decorative corner */
+        .mobile-corner-decor {
+            position: absolute;
+            bottom: 1.2rem;
+            right: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border-bottom: 1px solid rgba(200, 155, 60, 0.18);
+            border-right: 1px solid rgba(200, 155, 60, 0.18);
+            pointer-events: none;
+        }
+        /* ════════════════════════════════════ */
+
 
         .hero {
             position: relative;
@@ -1990,16 +2289,131 @@
         </div>
     </nav>
 
+    <!-- ═══════════════════════════════════════
+         REDESIGNED MOBILE MENU
+    ═══════════════════════════════════════ -->
     <div class="mobile-menu" id="mobileMenu">
-        <button class="mobile-close" onclick="toggleMenu()">✕</button>
-        <a href="#about" onclick="toggleMenu()">About</a>
-        <a href="#menu" onclick="toggleMenu()">Menu</a>
-        <a href="#booking" onclick="toggleMenu()">Book a Table</a>
-        <a href="#why" onclick="toggleMenu()">Why Us</a>
-        <a href="#reviews" onclick="toggleMenu()">Reviews</a>
-        <a href="#gallery" onclick="toggleMenu()">Gallery</a>
-        <a href="#location" onclick="toggleMenu()">Location</a>
+        <!-- Blurred backdrop — click to close -->
+        <div class="mobile-menu-backdrop" onclick="toggleMenu()"></div>
+
+        <!-- Slide-in panel -->
+        <div class="mobile-menu-panel">
+
+            <!-- Header -->
+            <!-- <div class="mobile-menu-header">
+                <div class="mobile-menu-brand">
+                    <div class="mobile-menu-brand-name">Arabian Darbar</div>
+                    <div class="mobile-menu-brand-sub">Restaurant · Haripad</div>
+                </div>
+                <button class="mobile-close" onclick="toggleMenu()" aria-label="Close menu"></button>
+            </div> -->
+
+            <!-- Nav links -->
+            <nav class="mobile-menu-nav">
+                <a href="#about" onclick="toggleMenu()">
+                    <div class="mnav-inner">
+                        <span class="mnav-num">01</span>
+                        <span class="mnav-text">About</span>
+                    </div>
+                    <div class="mnav-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
+                <a href="#menu" onclick="toggleMenu()">
+                    <div class="mnav-inner">
+                        <span class="mnav-num">02</span>
+                        <span class="mnav-text">Menu</span>
+                    </div>
+                    <div class="mnav-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
+                <a href="#booking" onclick="toggleMenu()">
+                    <div class="mnav-inner">
+                        <span class="mnav-num">03</span>
+                        <span class="mnav-text">Book a Table</span>
+                    </div>
+                    <div class="mnav-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
+                <a href="#why" onclick="toggleMenu()">
+                    <div class="mnav-inner">
+                        <span class="mnav-num">04</span>
+                        <span class="mnav-text">Why Us</span>
+                    </div>
+                    <div class="mnav-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
+                <a href="#reviews" onclick="toggleMenu()">
+                    <div class="mnav-inner">
+                        <span class="mnav-num">05</span>
+                        <span class="mnav-text">Reviews</span>
+                    </div>
+                    <div class="mnav-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
+                <a href="#gallery" onclick="toggleMenu()">
+                    <div class="mnav-inner">
+                        <span class="mnav-num">06</span>
+                        <span class="mnav-text">Gallery</span>
+                    </div>
+                    <div class="mnav-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
+                <a href="#location" onclick="toggleMenu()">
+                    <div class="mnav-inner">
+                        <span class="mnav-num">07</span>
+                        <span class="mnav-text">Location</span>
+                    </div>
+                    <div class="mnav-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </a>
+            </nav>
+
+            <!-- Footer CTA strip -->
+            <!-- <div class="mobile-menu-footer">
+                <a href="#booking" class="mobile-book-btn" onclick="toggleMenu()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <rect x="3" y="4" width="18" height="18" rx="2"/>
+                        <path d="M16 2v4M8 2v4M3 10h18"/>
+                    </svg>
+                    Book a Table
+                </a>
+                <div class="mobile-menu-meta">
+                    <span class="mobile-menu-hours">11AM – 11PM · Daily</span>
+                    <span class="mobile-menu-rating">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        4.5 · 36 Reviews
+                    </span>
+                </div> -->
+            </div>
+
+            <!-- Bottom decorative corner -->
+            <div class="mobile-corner-decor"></div>
+        </div>
     </div>
+    <!-- ════════════════════════════════════ -->
 
     <!-- HERO -->
     <section class="hero" id="hero">
